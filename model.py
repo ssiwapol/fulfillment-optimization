@@ -32,10 +32,14 @@ def optimize(data, config):
         model.cons.add(sum([model.x[ij] for ij in model.x if ij[1] == j]) <= model.y[j] * maxtrans)
 
     # objective function
-    shippingcost_penalty = 1000000000 * (sum(model.y[j] * shippingcost[j] for j in J) / sum(shippingcost.values()))
-    sellertotal_penalty = 1000000 * (sum(model.y[j] for j in J) / len(J))
-    distance_penalty = 1000 * (sum(model.y[j] * distance[j] for j in J) / sum(distance.values()))
-    ordercount_penalty = 1 * (sum(model.y[j] * ordercount[j] for j in J) / sum(ordercount.values()))
+    shippingcost_penalty = 0 if sum(shippingcost.values()) == 0 \
+        else 1000000000 * (sum(model.y[j] * shippingcost[j] for j in J) / sum(shippingcost.values()))
+    sellertotal_penalty = 0 if len(J) == 0 \
+        else 1000000 * (sum(model.y[j] for j in J) / len(J))
+    distance_penalty = 0 if sum(distance.values()) == 0 \
+        else 1000 * (sum(model.y[j] * distance[j] for j in J) / sum(distance.values()))
+    ordercount_penalty = 0 if sum(ordercount.values()) == 0 \
+        else 1 * (sum(model.y[j] * ordercount[j] for j in J) / sum(ordercount.values()))
     model.obj = pyomo.Objective(expr = shippingcost_penalty + sellertotal_penalty + distance_penalty + ordercount_penalty, 
                                 sense = pyomo.minimize)
 
@@ -61,9 +65,13 @@ def optimize(data, config):
                 "seller": j,
             })
 
-    output = {"status_solver": str(status['Solver'][0]['Status']),
-              "status_termination": str(status['Solver'][0]['Termination condition']),
-             "total_shippingcost": sum([shippingcost[j['seller']] for j in y]),
-             "total_distance": sum([distance[j['seller']] for j in y]),
-             "result": x}
+    output = {
+        "status_solver": str(status['Solver'][0]['Status']),
+        "status_termination": str(status['Solver'][0]['Termination condition']),
+        "total_shippingcost": sum([shippingcost[j['seller']] for j in y]),
+        "total_sellers": len(y),
+        "total_distance": sum([distance[j['seller']] for j in y]),
+        "total_ordercount": sum([ordercount[j['seller']] for j in y]),
+        "result": x
+             }
     return output

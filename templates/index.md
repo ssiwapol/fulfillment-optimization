@@ -18,16 +18,16 @@ apikey: [AUTH_KEY]
         {
             "product": "a",
             "seller": "1",
-            "shippingcost": 100,
+            "shippingcost": 1000,
             "distance": 100,
-            "ordercount": 100
+            "ordercount": 10
         },
         {
             "product": "b",
             "seller": "2",
-            "shippingcost": 200,
+            "shippingcost": 2000,
             "distance": 200,
-            "ordercount": 200
+            "ordercount": 20
         }
     ]
 }
@@ -42,16 +42,18 @@ apikey: [AUTH_KEY]
 {
     "status_solver": "ok",
     "status_termination": "optimal",
-    "total_shippingcost": 300,
+    "total_shippingcost": 3000,
+    "total_sellers": 2,
     "total_distance": 300,
+    "total_ordercount": 30,
     "result": [
         {
             "product": "a",
-            "seller": 1
+            "seller": "1"
         },
         {
             "product": "b",
-            "seller": 2
+            "seller": "2"
         }
     ]
 }
