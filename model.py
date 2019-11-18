@@ -57,6 +57,7 @@ def optimize(data, config):
             x.append({
                 "product": ij[0],
                 "seller": ij[1],
+                "shippingcost": shippingcost[ij[1]],
             })
     y = []
     for j in model.y:

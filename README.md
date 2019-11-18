@@ -54,11 +54,13 @@ apikey: [AUTH_KEY]
     "result": [
         {
             "product": "a",
-            "seller": 1
+            "seller": 1,
+            "shippingcost": 1000
         },
         {
             "product": "b",
-            "seller": 2
+            "seller": 2,
+            "shippingcost": 2000
         }
     ]
 }
